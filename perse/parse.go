@@ -16,7 +16,7 @@ var (
 const (
 	dir   string = "output"
 	ExUrl string = "https://cpp-learning.com"
-	Url          = "https://www.amazon.co.jp/dp/B07CZHKDQ6"
+	Url          = "https://www.amazon.co.jp/dp/"
 )
 
 type item struct {
@@ -33,13 +33,13 @@ type pageInfo struct {
 	Price      int     `json:"price"`
 }
 
-type Perse struct {
+type Parse struct {
 	Example *Example
 	Amazon  *Amazon
 }
 
-func NewPerse() *Perse {
-	return &Perse{
+func NewPerse() *Parse {
+	return &Parse{
 		Example: NewExample(),
 	}
 }

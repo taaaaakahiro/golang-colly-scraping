@@ -15,9 +15,8 @@ func NewAmazon() *Amazon {
 	return &Amazon{}
 }
 
-func (a *Amazon) Scraping() {
+func (a *Amazon) Scraping(asinCodes []string) {
 	p := &pageInfo{}
-	// items := make([]*item, 0, 4)
 
 	// Instantiate default collector
 	c := colly.NewCollector()
@@ -43,7 +42,6 @@ func (a *Amazon) Scraping() {
 		log.Println("error:", r.StatusCode, err)
 	})
 
-	// i := 0
 	c.OnHTML("#corePrice_feature_div", func(e *colly.HTMLElement) {
 		// price, err := strconv.Atoi(e.Text)
 		str := e.ChildText(".a-price-whole")
@@ -61,12 +59,15 @@ func (a *Amazon) Scraping() {
 	})
 
 	// Start scraping on https://XXX
-	c.Visit(Url)
+	for _, asinCode := range asinCodes {
+		c.Visit(Url + asinCode)
+		// Wait until threads are finished
+		c.Wait()
 
-	// Wait until threads are finished
-	c.Wait()
+		// Save as JSON format
+		fileName := fmt.Sprintf("./%s/%s.json", dir, fileName)
+		savePageJson(fileName, p)
 
-	// Save as JSON format
-	fileName := fmt.Sprintf("./%s/%s.json", dir, fileName)
-	savePageJson(fileName, p)
+	}
+
 }
